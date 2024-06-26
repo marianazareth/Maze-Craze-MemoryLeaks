@@ -1,5 +1,8 @@
-
-#include <iostream> 
+#include "backend.h"
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <cstdlib>
 #include <stack>
 #include <random>
 
@@ -15,7 +18,7 @@ class Node {
 public:
     int info;
     bool visited;
-    
+   
     Node* next;
 
     Node(int d, bool t) : info(d), visited(t), next(nullptr) {}
@@ -40,7 +43,7 @@ class nodeMatrix {
     }
 
 
-public: 
+public:
 
 
 nodeMatrix(int nodeRows, int nodeColumns) {
@@ -67,7 +70,7 @@ nodeMatrix(int nodeRows, int nodeColumns) {
         return true;
     }
     else{
-        return false; 
+        return false;
     }
 }
 
@@ -81,15 +84,35 @@ int directions[directionSize][sublistAmount] = {{-1,0}, {1,0},{0,-1}, {0,1}};
         dfsMatrix[startRow][startColumn]->visited = true;
 
         for (int i = 0; i < directionSize; ++i) {
-                
-                int newCol = dfsColumns + directions[i][0];
-                int newRow = dfsRows + directions[i][1];
-        {
-     if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns && !dfsMatrix[newRow][newCol]->visited) {
-            DFS(newRow, newCol, dfsMatrix);
-        }
+               
+                int newCol = dfsColumns + directions[i][1];
+               // implementar código parecido al del profe
+
                 }
-            
+           
         }
-    }
+    };
+
+class Player {
+    private:
+
+    public:
+};
+
+class Maze {
+    private:
+
+    public:
+};
+
+class PowerUp {
+    private:
+
+    public:
+};
+
+class Portal {
+    private:
+
+    public:
 };
