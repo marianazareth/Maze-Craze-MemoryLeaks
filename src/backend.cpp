@@ -1,4 +1,3 @@
-#include "backend.h"
 #include <iostream>
 #include <stack>
 #include <queue>
@@ -20,8 +19,6 @@ const double EXTRA_EDGE_PROB = 0.2;
 const double POWER_SPAWN_RATE = 0.1; 
 const double PORTAL_SPAWN_RATE = 0.05;
 
-enum Power { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
-
 class nodeCell {
 public:
     int info;
@@ -29,7 +26,7 @@ public:
     Power power; 
     nodeCell* next;
 
-    nodeCell(int d, bool t) : info(d), visited(t), power(NONE), next(nullptr) {}
+    nodeCell(int d, bool t, Power p) : info(d), visited(t), power(p), next(nullptr) {}
 };
 
 class Graph {
@@ -60,8 +57,6 @@ public:
 
 class nodeMatrix {
     nodeCell*** matrix;
-    std::pair<int, int> portalA, portalB;
-    bool hasPortal;
 
     void initializeMatrix(int nodeRows, int nodeColumns, nodeCell*** &matrix) {
         int count = 0;
@@ -75,19 +70,12 @@ class nodeMatrix {
         }
     }
 
-    void spawnPowers() {
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dis(0, 1);
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < columns; ++j) {
-                if (dis(gen) < POWER_SPAWN_RATE) {
-                    int powerType = rand() % 3 + 1; // 1 to 3 for DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL
-                    matrix[i][j]->power = static_cast<Power>(powerType);
-                }
-            }
-        }
-    }
+};
+
+class Portal{
+    std::pair<int, int> portalA, portalB;
+    bool hasPortal;
+    Portal() : hasPortal(false), portalA({-1, -1}), portalB({-1, -1}) {}
 
     void spawnPortals() {
         std::random_device rd;
@@ -110,6 +98,110 @@ class nodeMatrix {
         }
     
 
+};
+
+
+enum powerType { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
+enum class PowerType { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
+
+class Power {
+private:
+    bool powerPresence;
+    PowerType powerType;
+
+public:
+    Power() : powerPresence(false), powerType(PowerType::NONE) {}
+
+    void spawnPowers() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dis(0, 1);
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                if (dis(gen) < POWER_SPAWN_RATE) {
+                    int type = rand() % 3 + 1; // Generate random power type
+                    powerType = static_cast<PowerType>(type);
+                    powerPresence = true;
+                    return; // Only spawn one power per call
+                }
+            }
+        }
+    }
+
+    std::string getPowerTypeString() const {
+        switch (powerType) {
+            case PowerType::NONE:
+                return "NONE";
+            case PowerType::DOUBLE_PLAY:
+                return "DOUBLE_PLAY";
+            case PowerType::CONTROL_ENEMY:
+                return "CONTROL_ENEMY";
+            case PowerType::JUMP_WALL:
+                return "JUMP_WALL";
+            default:
+                return "UNKNOWN";
+        }
+    }
+
+    bool isPowerPresent() const {
+        return powerPresence;
+    }
+};
+
+
+enum playerTurn{
+    player1, player2
+};
+
+
+enum class PlayerTurn { PLAYER1, PLAYER2 };
+class Player {
+private:
+    std::string playerID;
+    std::pair<int, int> currentPosition;
+    bool hasWon;
+    PlayerTurn turn;
+
+public:
+    Player(const std::string& id, const std::pair<int, int>& startPos, PlayerTurn playerTurn)
+        : playerID(id), currentPosition(startPos), hasWon(false), turn(playerTurn) {}
+
+
+    std::string getPlayerID() const {
+        return playerID;
+    }
+
+    std::pair<int, int> getCurrentPosition() const {
+        return currentPosition;
+    }
+
+    bool getHasWon() const {
+        return hasWon;
+    }
+
+    PlayerTurn getTurn() const {
+        return turn;
+    }
+
+    void setPlayerID(const std::string& id) {
+        playerID = id;
+    }
+
+    void setCurrentPosition(const std::pair<int, int>& pos) {
+        currentPosition = pos;
+    }
+
+    void setHasWon(bool won) {
+        hasWon = won;
+    }
+
+    void setTurn(PlayerTurn playerTurn) {
+        turn = playerTurn;
+    }
+};
+
+
 public:
     nodeMatrix(int nodeRows, int nodeColumns) {
         initializeMatrix(nodeRows, nodeColumns, matrix);
@@ -127,11 +219,5 @@ public:
             delete[] matrix[i];
         }
         delete[] matrix;
-    }
 };
 
-
-
-
-    public:
-};
