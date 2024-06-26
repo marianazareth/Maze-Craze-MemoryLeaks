@@ -19,14 +19,16 @@ const double EXTRA_EDGE_PROB = 0.2;
 const double POWER_SPAWN_RATE = 0.1; 
 const double PORTAL_SPAWN_RATE = 0.05;
 
+enum class PowerType { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
+
 class nodeCell {
 public:
     int info;
     bool visited;
-    Power power; 
     nodeCell* next;
 
-    nodeCell(int d, bool t, Power p) : info(d), visited(t), power(p), next(nullptr) {}
+    nodeCell(int d, bool t) : info(d), visited(t), next(nullptr) {}
+
 };
 
 class Graph {
@@ -57,6 +59,8 @@ public:
 
 class nodeMatrix {
     nodeCell*** matrix;
+    Portal portal;
+    Power power;
 
     void initializeMatrix(int nodeRows, int nodeColumns, nodeCell*** &matrix) {
         int count = 0;
@@ -64,15 +68,37 @@ class nodeMatrix {
         for (int i = 0; i < nodeRows; ++i) {
             matrix[i] = new nodeCell*[nodeColumns];
             for (int j = 0; j < nodeColumns; ++j) {
+                std::random_device rd;
+                std::mt19937 gen(rd());
                 matrix[i][j] = new nodeCell(count, false);
                 count++;
             }
         }
     }
+    public:
+    nodeMatrix(int nodeRows, int nodeColumns) {
+        initializeMatrix(nodeRows, nodeColumns, matrix);
+        Graph graph;
+        graph.DFS(startRow, startColumn, matrix);
+        power.spawnPowers();
+        portal.spawnPortals();
+    }
+
+    ~nodeMatrix() {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < columns; ++j) {
+                delete matrix[i][j];
+            }
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+};
+
+
 
 };
 
-class Portal{
+class Portal : public nodeCell {
     std::pair<int, int> portalA, portalB;
     bool hasPortal;
     Portal() : hasPortal(false), portalA({-1, -1}), portalB({-1, -1}) {}
@@ -101,10 +127,7 @@ class Portal{
 };
 
 
-enum powerType { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
-enum class PowerType { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
-
-class Power {
+class Power : public nodeCell {
 private:
     bool powerPresence;
     PowerType powerType;
@@ -120,10 +143,10 @@ public:
         for (int i = 0; i < rows; ++i) {
             for (int j = 0; j < columns; ++j) {
                 if (dis(gen) < POWER_SPAWN_RATE) {
-                    int type = rand() % 3 + 1; // Generate random power type
-                    powerType = static_cast<PowerType>(type);
+                    int type = rand() % 3 + 1; 
+                    powerType = static_cast<PowerType>(type); //converts from int to PowerType
                     powerPresence = true;
-                    return; // Only spawn one power per call
+                    return; 
                 }
             }
         }
@@ -158,7 +181,6 @@ enum playerTurn{
 enum class PlayerTurn { PLAYER1, PLAYER2 };
 class Player {
 private:
-    std::string playerID;
     std::pair<int, int> currentPosition;
     bool hasWon;
     PlayerTurn turn;
@@ -202,22 +224,5 @@ public:
 };
 
 
-public:
-    nodeMatrix(int nodeRows, int nodeColumns) {
-        initializeMatrix(nodeRows, nodeColumns, matrix);
-        Graph graph;
-        graph.DFS(startRow, startColumn, matrix);
-        spawnPowers();
-        spawnPortals();
-    }
 
-    ~nodeMatrix() {
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < columns; ++j) {
-                delete matrix[i][j];
-            }
-            delete[] matrix[i];
-        }
-        delete[] matrix;
-};
 
