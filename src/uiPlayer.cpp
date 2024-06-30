@@ -1,12 +1,26 @@
+#include "uiMain.h"
+#include "uiImageLoader.h"
 #include "uiPlayer.h"
 #include <iostream>
 using namespace std;
 
-PlayerUI::PlayerUI() :  texture(nullptr) {}
+ImageLoader imageLoader;
+
+PlayerUI::PlayerUI() :  texture(nullptr), positionX(0), positionY(0), jumpWallAmount(0) {}
 
 PlayerUI::~PlayerUI() { 
     if (texture) SDL_DestroyTexture(texture);
     SDL_Quit();
+}
+
+void PlayerUI::renderPlayer(SDL_Renderer* renderer, int row, int col, int num) {
+    SDL_Rect player = {col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE};
+    if (!imageLoader.textures.empty()) {
+        SDL_RenderCopy(renderer, imageLoader.textures[num], nullptr, &player);
+    } else {
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &player);
+    }
 }
 
 bool PlayerUI::processInputP1(char& direction) {

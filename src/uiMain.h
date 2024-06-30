@@ -4,22 +4,17 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include "backend.h"
 #include <string>
 #include <vector>
+#define CELL_SIZE 50
 using namespace std;
 
 class UI {
 public:
     UI();
     ~UI();
-    vector<SDL_Texture*> textures;
-    vector<string> imagePaths;
-    void generatePathsForVector();
-    bool loadImages(const vector<string>& paths);
     bool initialize();
-    void renderTitleScreen();
-    void renderMainProgram(const Backend& backend, int num);
+    void renderMainProgram(const auto& grid, int num);
 
 private:
     SDL_Window* window;
