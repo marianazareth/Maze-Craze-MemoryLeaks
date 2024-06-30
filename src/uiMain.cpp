@@ -1,6 +1,9 @@
+#include "uiImageLoader.h"
 #include "uiMain.h"
 #include <iostream>
 using namespace std;
+
+ImageLoader imageLoader;
 
 UI::UI() : window(nullptr), renderer(nullptr), texture(nullptr) {}
 
@@ -9,30 +12,6 @@ UI::~UI() {
     if (window) SDL_DestroyWindow(window);
     if (texture) SDL_DestroyTexture(texture);
     SDL_Quit();
-}
-
-void UI::generatePathsForVector() {
-    imagePaths.push_back("ui files/titlebg.png");
-    imagePaths.push_back("ui files/player1.png");
-    imagePaths.push_back("ui files/player2.png");
-}
-
-bool UI::loadImages(const vector<string>& paths) {
-    for (const auto& path : paths) {
-        SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-        if (!loadedSurface) {
-            cerr << "Unable to load image " << path << "! SDL_image Error: " << IMG_GetError() << endl;
-            return false;
-        }
-        SDL_Texture* newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-        SDL_FreeSurface(loadedSurface);
-        if (!newTexture) {
-            cerr << "Unable to create texture from " << path << "! SDL Error: " << SDL_GetError() << endl;
-            return false;
-        }
-        textures.push_back(newTexture);
-    }
-    return true;
 }
 
 bool UI::initialize() {
@@ -69,9 +48,9 @@ bool UI::initialize() {
         return false;
     }
 
-    generatePathsForVector();
+    imageLoader.generatePathsForVector();
 
-    if (!loadImages(imagePaths)) {
+    if (!imageLoader.loadImages(renderer, imageLoader.imagePaths)) {
         cerr << "Las imagenes no pudieron ser creadas." << endl;
         return false;
     }
@@ -79,23 +58,10 @@ bool UI::initialize() {
     return true;
 }
 
-void UI::renderTitleScreen() {
-    SDL_RenderClear(renderer);
-
-    SDL_RenderCopy(renderer, textures[0], nullptr, nullptr);
-
-    SDL_Rect playButton = {600, 1665, 700, 200};
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderFillRect(renderer, &playButton);
-
-    SDL_RenderPresent(renderer);
-}
-
-void UI::renderMainProgram(const Backend& backend, int num) {
+void UI::renderMainProgram(const auto& grid, int num) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    const auto& grid = backend.getGrid();
     for (int i = 0; i < GRID_ROWS; ++i) {
         for (int j = 0; j < GRID_COLS; ++j) {
             if (grid[i][j] == num) {

@@ -3,13 +3,13 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 using namespace std;
 
 class PlayerUI {
 public:
     PlayerUI();
     ~PlayerUI();
+    void renderPlayer(SDL_Renderer* renderer, int row, int col, int num);
     bool processInputP1(char& direction);
     bool processInputP2(char& direction);
     int setPosition(int rowBackend, int colBackend, int cellSize);

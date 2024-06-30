@@ -1,6 +1,6 @@
 #include <iostream>
 #include "backend.h"
-#include "ui.h"
+#include "uiMain.h"
 
 int main(int argc, char* argv[]) {
     Backend backend;
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     char direction = '\0';
 
     while (running) {
-        running = ui.processInput(direction);
+        // running = ui.processInput(direction);
         if (direction != '\0') {
             backend.moveCube(direction);
             direction = '\0';
