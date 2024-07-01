@@ -27,9 +27,11 @@ int main(int argc, char* argv[]) {
         if (gameState == TITLE_SCREEN) {
             UI_TitleScreen.runTitleScreen(renderer);
         } else if (gameState == MAIN_PROGRAM) {
-            // UI_Main.runMainProgram(matrix, playerNumber); // AQUI SE UTILIZAN LOS VALORES DEL BACKEND PARA RENDERIZAR
+            // UI_Main.renderMainProgram(matrix, playerNumber); // AQUI SE UTILIZAN LOS VALORES DEL BACKEND PARA RENDERIZAR
         }
-
+        else if (gameState == WIN_SCREEN) {
+            UI_Treasure.runWinScreen(renderer, 1);
+        }
 
         while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_QUIT) {
