@@ -3,6 +3,7 @@
 
 #include "nodeCell.h"
 #include <string>
+#include "Player.h"
 
 enum class PowerType { NONE, DOUBLE_PLAY, CONTROL_ENEMY, JUMP_WALL };
 

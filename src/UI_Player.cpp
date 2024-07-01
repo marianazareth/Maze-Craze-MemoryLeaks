@@ -1,19 +1,12 @@
-#include "uiMain.h"
-#include "uiImageLoader.h"
-#include "uiPlayer.h"
+#include "UI_Cell.h"
+#include "UI_ImageLoader.h"
+#include "UI_Player.h"
 #include <iostream>
 using namespace std;
 
-ImageLoader imageLoader;
+UI_Player::UI_Player() :  positionX(0), positionY(0), jumpWallAmount(0) {}
 
-PlayerUI::PlayerUI() :  texture(nullptr), positionX(0), positionY(0), jumpWallAmount(0) {}
-
-PlayerUI::~PlayerUI() { 
-    if (texture) SDL_DestroyTexture(texture);
-    SDL_Quit();
-}
-
-void PlayerUI::renderPlayer(SDL_Renderer* renderer, int row, int col, int num) {
+void UI_Player::renderPlayer(SDL_Renderer* renderer, int row, int col, int num) {
     SDL_Rect player = {col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE};
     if (!imageLoader.textures.empty()) {
         SDL_RenderCopy(renderer, imageLoader.textures[num], nullptr, &player);
@@ -23,7 +16,7 @@ void PlayerUI::renderPlayer(SDL_Renderer* renderer, int row, int col, int num) {
     }
 }
 
-bool PlayerUI::processInputP1(char& direction) {
+bool UI_Player::processInputP1(char& direction) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -35,14 +28,14 @@ bool PlayerUI::processInputP1(char& direction) {
                 case SDLK_s: direction = 's'; break;
                 case SDLK_a: direction = 'a'; break;
                 case SDLK_d: direction = 'd'; break;
-                default: direction = '\0'; break;
+                default: direction = 'x'; break;
             }
         }
     }
     return true;
 }
 
-bool PlayerUI::processInputP2(char& direction) {
+bool UI_Player::processInputP2(char& direction) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -54,14 +47,22 @@ bool PlayerUI::processInputP2(char& direction) {
                 case SDLK_DOWN: direction = 's'; break;
                 case SDLK_LEFT: direction = 'a'; break;
                 case SDLK_RIGHT: direction = 'd'; break;
-                default: direction = '\0'; break;
+                default: direction = 'x'; break;
             }
         }
     }
     return true;
 }
 
-int PlayerUI::setPosition(int rowBackend, int colBackend, int cellSize) {
-    this->positionY = rowBackend * cellSize;
-    this->positionX = rowBackend * cellSize;
+void UI_Player::setPosition(int rowBackend, int colBackend) {
+    this->positionY = rowBackend;
+    this->positionX = rowBackend;
+}
+
+void UI_Player::setJumpWallAmount(int jwAmountBackend) {
+    this->jumpWallAmount = jwAmountBackend;
+}
+
+int UI_Player::getJumpWallAmount() const{
+    return jumpWallAmount;
 }

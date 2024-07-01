@@ -7,6 +7,7 @@
 #include "Graph.h"
 #include "Portal.h"
 #include "Power.h"
+#include "Player.h"
 
 class nodeMatrix {
     nodeCell*** matrix;
@@ -18,6 +19,8 @@ class nodeMatrix {
 public:
     nodeMatrix(int nodeRows, int nodeColumns);
     ~nodeMatrix();
+    void movePlayer(Player& player, int dx, int dy);
+
 };
 
 #endif // NODEMATRIX_H

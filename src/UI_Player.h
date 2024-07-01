@@ -5,17 +5,18 @@
 #include <SDL2/SDL_image.h>
 using namespace std;
 
-class PlayerUI {
+class UI_Player {
 public:
-    PlayerUI();
-    ~PlayerUI();
+    UI_Player();
+    ~UI_Player();
     void renderPlayer(SDL_Renderer* renderer, int row, int col, int num);
     bool processInputP1(char& direction);
     bool processInputP2(char& direction);
-    int setPosition(int rowBackend, int colBackend, int cellSize);
+    void setPosition(int rowBackend, int colBackend);
+    void setJumpWallAmount(int jwAmountBackend);
+    int getJumpWallAmount() const;
 
 private:
-    SDL_Texture* texture;
     int positionX;
     int positionY;
     int jumpWallAmount;

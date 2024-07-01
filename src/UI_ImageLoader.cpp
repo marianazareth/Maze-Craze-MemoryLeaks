@@ -1,8 +1,10 @@
-#include "uiImageLoader.h"
+#include "UI_ImageLoader.h"
 #include <iostream>
 using namespace std;
 
-void ImageLoader::generatePathsForVector() {
+UI_ImageLoader imageLoader;
+
+void UI_ImageLoader::generatePathsForVector() {
     imagePaths.push_back("ui files/titlebg.png"); // Position in vector: 0
     imagePaths.push_back("ui files/player1.png"); // Position in vector: 1
     imagePaths.push_back("ui files/player2.png"); // Position in vector: 2
@@ -11,9 +13,10 @@ void ImageLoader::generatePathsForVector() {
     imagePaths.push_back("ui files/JumpWallCell.png"); // Position in vector: 5
     imagePaths.push_back("ui files/PortalCell.png"); // Position in vector: 6
     imagePaths.push_back("ui files/TreasureCell.png"); // Position in vector: 7
+    imagePaths.push_back("ui files/winscreen.png"); // Position in vector: 8
 }
 
-bool ImageLoader::loadImages(SDL_Renderer* renderer, const vector<string>& paths) {
+bool UI_ImageLoader::loadImages(SDL_Renderer* renderer, const vector<string>& paths) {
     for (const auto& path : paths) {
         SDL_Surface* loadedSurface = IMG_Load(path.c_str());
         if (!loadedSurface) {

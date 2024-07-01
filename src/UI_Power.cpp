@@ -1,20 +1,17 @@
-#include "uiMain.h"
-#include "uiCell.h"
-#include "uiImageLoader.h"
-#include "uiPower.h"
+#include "UI_Cell.h"
+#include "UI_ImageLoader.h"
+#include "UI_Power.h"
 #include <iostream>
 using namespace std;
 
-ImageLoader imageLoader;
+UI_Power::UI_Power() : texture(nullptr), positionX(0), positionY(0) {}
 
-PowerUI::PowerUI() : texture(nullptr), positionX(0), positionY(0) {}
-
-PowerUI::~PowerUI() {
+UI_Power::~UI_Power() {
     if (texture) SDL_DestroyTexture(texture);
     SDL_Quit();
 }
 
-void PowerUI::renderPower(SDL_Renderer* renderer, int row, int col, int num) {         
+void UI_Power::renderPower(SDL_Renderer* renderer, int row, int col, int num) {         
     SDL_Rect powerForCell = {col * CELL_SIZE + BORDER_WIDTH, row * CELL_SIZE + BORDER_WIDTH, 
                           CELL_SIZE - 2 * BORDER_WIDTH, CELL_SIZE - 2 * BORDER_WIDTH};
             

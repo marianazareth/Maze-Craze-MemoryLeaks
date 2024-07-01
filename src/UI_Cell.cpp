@@ -1,19 +1,16 @@
-#include "uiMain.h"
-#include "uiImageLoader.h"
-#include "uiCell.h"
+#include "UI_ImageLoader.h"
+#include "UI_Cell.h"
 #include <iostream>
 using namespace std;
 
-ImageLoader imageLoader;
+UI_Cell::UI_Cell() : texture(nullptr), positionX(0), positionY(0) {}
 
-CellUI::CellUI() : texture(nullptr), positionX(0), positionY(0) {}
-
-CellUI::~CellUI() {
+UI_Cell::~UI_Cell() {
     if (texture) SDL_DestroyTexture(texture);
     SDL_Quit();
 }
 
-void CellUI::renderCell(SDL_Renderer* renderer, int row, int col, int num) {
+void UI_Cell::renderCell(SDL_Renderer* renderer, int row, int col) { // Añadir 'int num' a los argumentos si existe una imagen para la celda
     SDL_Color borderColor = {0, 0, 0, 255};
     SDL_Color fillColor = {255, 255, 255, 255};
 
@@ -27,9 +24,9 @@ void CellUI::renderCell(SDL_Renderer* renderer, int row, int col, int num) {
     SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
     SDL_RenderFillRect(renderer, &innerCell);
             
-    if (!imageLoader.textures.empty()) { // !imageLoader.textures.empty()
-        SDL_RenderCopy(renderer, imageLoader.textures[num], nullptr, &innerCell);
-    }
+    // if (!imageLoader.textures.empty()) { 
+        // SDL_RenderCopy(renderer, imageLoader.textures[num], nullptr, &innerCell);
+    // }
 
     SDL_RenderPresent(renderer);
 }

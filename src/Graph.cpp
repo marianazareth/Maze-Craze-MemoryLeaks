@@ -25,3 +25,26 @@ void Graph::DFS(int dfsRows, int dfsColumns, nodeCell***& dfsMatrix) {
         }
     }
 }
+
+void Graph::BFS(int bfsRows, int bfsColumns, nodeCell***& bfsMatrix) {
+    int directions[4][2] = { {-1,0}, {1,0},{0,-1}, {0,1} };
+    std::queue<std::pair<int, int>> bfsQueue;
+    bfsQueue.push({bfsRows, bfsColumns});
+    bfsMatrix[bfsRows][bfsColumns]->visited = true;
+
+    while (!bfsQueue.empty()) {
+        int currentRow = bfsQueue.front().first;
+        int currentCol = bfsQueue.front().second;
+        bfsQueue.pop();
+
+        for (int i = 0; i < 4; ++i) {
+            int newRow = currentRow + directions[i][0];
+            int newCol = currentCol + directions[i][1];
+            if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns && !bfsMatrix[newRow][newCol]->visited) {
+                addEdges(bfsMatrix[currentRow][currentCol], bfsMatrix[newRow][newCol]);
+                bfsMatrix[newRow][newCol]->visited = true;
+                bfsQueue.push({newRow, newCol});
+            }
+        }
+    }
+}
