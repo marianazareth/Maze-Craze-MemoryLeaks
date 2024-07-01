@@ -13,6 +13,8 @@ class nodeMatrix {
     nodeCell*** matrix;
     Portal* portal;
     Power* power;
+    Player player1;
+    Player player2;
 
     void initializeMatrix(int nodeRows, int nodeColumns, nodeCell***& matrix);
 

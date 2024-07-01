@@ -48,4 +48,3 @@ nodeMatrix::~nodeMatrix() {
     delete power;
     delete portal;
 }
-
