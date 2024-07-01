@@ -7,14 +7,10 @@
 #include <string>
 using namespace std;
 
-class TitleScreen {
+class UI_TitleScreen {
 public:
-    TitleScreen();
-    ~TitleScreen();
-    void renderTitleScreen(SDL_Renderer* renderer);
-
-private:
-    SDL_Texture* backgroundImage;
+    void runTitleScreen(SDL_Renderer* renderer);
+    bool handleEvents(SDL_Event& event);
 };
 
 #endif

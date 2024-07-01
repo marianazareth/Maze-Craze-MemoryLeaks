@@ -3,6 +3,7 @@
 
 #include "nodeCell.h"
 #include <unordered_map>
+#include <queue>
 #include <vector>
 #include <string>
 
@@ -12,6 +13,7 @@ public:
 
     void addEdges(nodeCell* firstCell, nodeCell* secondCell);
     void DFS(int dfsRows, int dfsColumns, nodeCell***& dfsMatrix);
+    void BFS(int bfsRows, int bfsColumns, nodeCell***& bfsMatrix);
 };
 
 #endif // GRAPH_H

@@ -24,12 +24,12 @@ void Power::spawnPowers() {
     }
 }
 
-std::string Power::getPowerTypeString() const {
+Power Power::getPowerType(PlayerTurn playerToGetPower) const {
     switch (powerType) {
     case PowerType::NONE:
         return "NONE";
     case PowerType::DOUBLE_PLAY:
-        return "DOUBLE_PLAY";
+        return doublePlay(playerToGetPower);
     case PowerType::CONTROL_ENEMY:
         return "CONTROL_ENEMY";
     case PowerType::JUMP_WALL:
@@ -41,4 +41,11 @@ std::string Power::getPowerTypeString() const {
 
 bool Power::isPowerPresent() const {
     return powerPresence;
+}
+
+Player doublePlay(Player& playerGetsDouble){
+    if(player.setTurn (playerGetsDouble)){
+        player.setNextTurn(playerGetsDouble);
+    }
+
 }

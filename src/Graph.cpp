@@ -26,7 +26,7 @@ void Graph::DFS(int dfsRows, int dfsColumns, nodeCell***& dfsMatrix) {
     }
 }
 
-void BFS(int bfsRows, int bfsColumns, nodeCell***& bfsMatrix) {
+void Graph::BFS(int bfsRows, int bfsColumns, nodeCell***& bfsMatrix) {
     int directions[4][2] = { {-1,0}, {1,0},{0,-1}, {0,1} };
     std::queue<std::pair<int, int>> bfsQueue;
     bfsQueue.push({bfsRows, bfsColumns});
@@ -48,4 +48,3 @@ void BFS(int bfsRows, int bfsColumns, nodeCell***& bfsMatrix) {
         }
     }
 }
-};

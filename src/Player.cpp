@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(const std::string& id, const std::pair<int, int>& startPos, PlayerTurn playerTurn)
-    : playerID(id), currentPosition(startPos), hasWon(false), turn(playerTurn) {}
+    : playerID(id), currentPosition(startPos), hasWon(false), turn(playerTurn), whosNextTurn(playerTurn2) {}
 
 std::string Player::getPlayerID() const {
     return playerID;
@@ -34,3 +34,8 @@ void Player::setHasWon(bool won) {
 void Player::setTurn(PlayerTurn playerTurn) {
     turn = playerTurn;
 }
+
+void Player::setNextTurn(PlayerTurn playerTurn2) {
+    whosNextTurn = playerTurn2;
+}
+

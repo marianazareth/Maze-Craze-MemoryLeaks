@@ -7,12 +7,14 @@
 #include <vector>
 using namespace std;
 
-class ImageLoader {
+class UI_ImageLoader {
 public: 
     vector<SDL_Texture*> textures;
     vector<string> imagePaths;
     void generatePathsForVector();
     bool loadImages(SDL_Renderer* renderer, const vector<string>& paths);
 };
+
+extern UI_ImageLoader imageLoader;
 
 #endif

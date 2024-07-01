@@ -5,10 +5,10 @@
 #include <SDL2/SDL_image.h>
 using namespace std;
 
-class PowerUI {
+class UI_Power {
 public:
-    PowerUI();
-    ~PowerUI();
+    UI_Power();
+    ~UI_Power();
     void renderPower(SDL_Renderer* renderer, int row, int col, int num);
 
 private:

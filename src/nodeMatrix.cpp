@@ -27,14 +27,14 @@ nodeMatrix::nodeMatrix(int nodeRows, int nodeColumns) {
     portal->spawnPortals();
 }
 
-nodeMatrix::movePlayer(Player& player, int dx, int dy) {
-        auto currentPos = player.getCurrentPosition();
-        int newRow = currentPos.first + dx;
-        int newCol = currentPos.second + dy;
+void nodeMatrix::movePlayer(Player& player, int dx, int dy) {
+    auto currentPos = player.getCurrentPosition();
+    int newRow = currentPos.first + dx;
+    int newCol = currentPos.second + dy;
         
-        if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
-            movePlayer(player, dx, dy);
-        }
+    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
+        movePlayer(player, dx, dy);
+    }
 };
 
 nodeMatrix::~nodeMatrix() {
@@ -48,4 +48,3 @@ nodeMatrix::~nodeMatrix() {
     delete power;
     delete portal;
 }
-

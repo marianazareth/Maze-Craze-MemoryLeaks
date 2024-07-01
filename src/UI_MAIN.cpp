@@ -1,27 +1,27 @@
-#include "uiImageLoader.h"
-#include "uiMain.h"
+#include "UI_ImageLoader.h"
+#include "UI_Board.h"
+#include "UI_MAIN.h"
 #include <iostream>
 using namespace std;
 
-ImageLoader imageLoader;
+UI_Board uiBoard;
 
-UI::UI() : window(nullptr), renderer(nullptr), texture(nullptr) {}
+UI_MAIN::UI_MAIN() : window(nullptr), renderer(nullptr) {}
 
-UI::~UI() {
+UI_MAIN::~UI_MAIN() {
     if (renderer) SDL_DestroyRenderer(renderer);
     if (window) SDL_DestroyWindow(window);
-    if (texture) SDL_DestroyTexture(texture);
     SDL_Quit();
 }
 
-bool UI::initialize() {
+bool UI_MAIN::initialize() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         cerr << "No se pudo inicializar SDL: " << SDL_GetError() << ::endl;
         return false;
     }
 
     window = SDL_CreateWindow(
-        "Maze Craze (Memory Leaks)",
+        "Maze Craze - Memory Leaks",
          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
         cerr << "La ventana no pudo ser creada: " << SDL_GetError() << endl;
@@ -49,33 +49,27 @@ bool UI::initialize() {
     }
 
     imageLoader.generatePathsForVector();
-
-    if (!imageLoader.loadImages(renderer, imageLoader.imagePaths)) {
-        cerr << "Las imagenes no pudieron ser creadas." << endl;
-        return false;
-    }
+    imageLoader.loadImages(renderer, imageLoader.imagePaths);
 
     return true;
 }
 
-void UI::renderMainProgram(const auto& grid, int num) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+SDL_Renderer* UI_MAIN::getRenderer() const {
+    return renderer;
+}
 
-    for (int i = 0; i < GRID_ROWS; ++i) {
-        for (int j = 0; j < GRID_COLS; ++j) {
-            if (grid[i][j] == num) {
-                SDL_Rect player = {j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE};
-                if (!textures.empty()) {
-                    SDL_RenderCopy(renderer, textures[num], nullptr, &player);
-                } else {
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                    SDL_RenderFillRect(renderer, &player);
-                }
-            }
-        }
-    }
+void UI_MAIN::renderMainProgram(int** grid, int numPlayer, int jwAmount) {
+    SDL_RenderClear(renderer);
+    
+    uiBoard.renderBoard(renderer, grid, 5, 5);
 
     SDL_RenderPresent(renderer);
 }
 
+void UI_MAIN::endProgram() {
+    SDL_Delay(10000);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
+}
