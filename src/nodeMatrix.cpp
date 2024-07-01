@@ -17,7 +17,7 @@ void nodeMatrix::initializeMatrix(int nodeRows, int nodeColumns, nodeCell***& ma
     }
 }
 
-    nodeMatrix::nodeMatrix(int nodeRows, int nodeColumns){ 
+nodeMatrix::nodeMatrix(int nodeRows, int nodeColumns) {
     initializeMatrix(nodeRows, nodeColumns, matrix);
     Graph graph;
     graph.DFS(startRow, startColumn, matrix);
@@ -28,13 +28,13 @@ void nodeMatrix::initializeMatrix(int nodeRows, int nodeColumns, nodeCell***& ma
 }
 
 void nodeMatrix::movePlayer(Player& player, int dx, int dy) {
-        auto currentPos = player.getCurrentPosition();
-        int newRow = currentPos.first + dx;
-        int newCol = currentPos.second + dy;
+    auto currentPos = player.getCurrentPosition();
+    int newRow = currentPos.first + dx;
+    int newCol = currentPos.second + dy;
         
-        if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
-            player.setCurrentPosition({newRow, newCol});
-        }
+    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns) {
+        movePlayer(player, dx, dy);
+    }
 };
 
 nodeMatrix::~nodeMatrix() {
@@ -48,3 +48,4 @@ nodeMatrix::~nodeMatrix() {
     delete power;
     delete portal;
 }
+
